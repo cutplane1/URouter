@@ -1,6 +1,5 @@
 <?php
 
-
 class URouter
 {
     public array $map;
@@ -29,15 +28,10 @@ class URouter
     }
 }
 
-// preg_match("/^\/users\/(\w+)$/", $_SERVER["REQUEST_URI"], $outr);
-
-// var_dump($outr);
-
 $r = new URouter();
 
-$r->add("/users/#/#", function($some_argument, $dd) {
-    var_dump($some_argument, $dd);
+$r->add("/users/#/#", function($some_argument, $some_argument2) {
+    var_dump($some_argument, $some_argument2);
 });
 
 $r->dispatch($_SERVER["REQUEST_URI"]);
-// $r->r2regex("/users/#");
