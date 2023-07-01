@@ -28,6 +28,7 @@ class URouter
     }
 }
 
+/* EXAMPLE:
 $r = new URouter();
 
 $r->add("/users/#/#", function($some_argument, $some_argument2) {
@@ -35,3 +36,4 @@ $r->add("/users/#/#", function($some_argument, $some_argument2) {
 });
 
 $r->dispatch($_SERVER["REQUEST_URI"]);
+*/
