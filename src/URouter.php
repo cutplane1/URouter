@@ -1,5 +1,7 @@
 <?php
 
+namespace Cutplane1;
+
 class URouter
 {
     public array $map;
