@@ -5,16 +5,18 @@ class URouter
 {
     public array $map;
 
-    public function add(string $pattern, callable $callback)
+    public function add(string $pattern, callable $callback): void
     {
         $this->map[$pattern] = ["pattern" => $pattern, "callback" => $callback];
     }
 
-    public function dispatch()
+    public function dispatch(string $ur)
     {
-        foreach ($this->map as $pattern) 
+        foreach ($this->map as $pattern)
         {
-            echo $pattern["pattern"];
+            preg_match($pattern["pattern"], $ur, $outr);
+            array_shift($outr);
+            call_user_func_array($pattern["callback"], $outr);
         }
     }
 }
@@ -29,4 +31,4 @@ $r->add("/^\/users\/(\w+)$/", function($some_argument) {
     var_dump($some_argument);
 });
 
-$r->dispatch();
+$r->dispatch($_SERVER["REQUEST_URI"]);
