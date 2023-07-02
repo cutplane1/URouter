@@ -15,7 +15,8 @@ class URouter
     public function r2regex(string $r): string
     {
         $r = str_replace("/", "\/", $r);
-        $r = str_replace("#", "(\w+)", $r);
+        $r = str_replace("#", "(\D+)", $r);
+        $r = str_replace("@", "(\d+)", $r);
         return "/^". $r . "$/";
     }
 
