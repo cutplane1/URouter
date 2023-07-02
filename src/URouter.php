@@ -6,7 +6,7 @@ class URouter
 {
     public array $map;
 
-    public function add(string $pattern, callable $callback): void
+    public function add(string $pattern, mixed $callback): void
     {
         $pattern = $this->r2regex($pattern);
         $this->map[$pattern] = ["pattern" => $pattern, "callback" => $callback];
