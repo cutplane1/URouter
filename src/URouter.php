@@ -23,9 +23,11 @@ class URouter
     {
         foreach ($this->map as $pattern)
         {
-            preg_match($pattern["pattern"], $ur, $outr);
-            array_shift($outr);
-            call_user_func_array($pattern["callback"], $outr);
+            if (preg_match($pattern["pattern"], $ur, $outr))
+            {
+                array_shift($outr);
+                call_user_func_array($pattern["callback"], $outr);
+            }
         }
     }
 }
