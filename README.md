@@ -1,6 +1,8 @@
 # u-router
 
 ```php
+<?php
+
 $posts = [
     [
         "id" => 1,
