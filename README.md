@@ -31,13 +31,11 @@ $router->middleware(function() {
     header('Content-Type: application/json; charset=utf-8');
 });
 
-$router->route("/", function() {
-    global $posts;
+$router->route("/", function() use ($posts) {
     echo json_encode($posts);
 });
 
-// @ => (\d+)
-$router->route("/@", function($id) {
+$router->route("/@", function($id) use ($posts) {
     global $posts;
     echo json_encode($posts[$id]);
 });
