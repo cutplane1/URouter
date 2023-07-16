@@ -4,7 +4,8 @@ namespace Cutplane1;
 
 class URouter
 {
-    public array $route_map, $middleware_map;
+    public array $route_map;
+    public array $middleware_map = [];
 
     public function route(string $pattern, mixed $callback): void
     {
@@ -15,7 +16,9 @@ class URouter
     public function r2regex(string $r): string
     {
         $r = str_replace("/", "\/", $r);
+        // not int
         $r = str_replace("#", "(\D+)", $r);
+        // int
         $r = str_replace("@", "(\d+)", $r);
         return "/^". $r . "$/";
     }
@@ -24,7 +27,7 @@ class URouter
     {
         foreach($this->middleware_map as $middleware)
         {
-            echo $middleware;
+            call_user_func($middleware);
         }
 
         foreach($this->route_map as $pattern)
