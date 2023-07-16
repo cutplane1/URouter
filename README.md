@@ -3,7 +3,7 @@
 ```php
 <?php
 
-$posts = [
+$items = [
     [
         "id" => 1,
         "title" => "example1",
@@ -31,15 +31,12 @@ $router->middleware(function() {
     header('Content-Type: application/json; charset=utf-8');
 });
 
-$router->route("/", function() {
-    global $posts;
-    echo json_encode($posts);
+$router->route("/", function() use ($items) {
+    echo json_encode($items);
 });
 
-// @ => (\d+)
-$router->route("/@", function($id) {
-    global $posts;
-    echo json_encode($posts[$id]);
+$router->route("/@", function($id) use ($items) {
+    echo json_encode($items[$id]);
 });
 
 $router->dispatch($_SERVER["REQUEST_URI"]);
