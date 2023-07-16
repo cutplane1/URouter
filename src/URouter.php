@@ -7,10 +7,12 @@ class URouter
     public array $route_map;
     public array $middleware_map = [];
 
-    public function route(string $pattern, mixed $callback): void
+    public function route(string $pattern, mixed $callback): URouter
     {
         $pattern = $this->r2regex($pattern);
         $this->route_map[$pattern] = ["pattern" => $pattern, "callback" => $callback];
+
+        return $this;
     }
 
     public function r2regex(string $r): string
@@ -20,10 +22,11 @@ class URouter
         $r = str_replace("#", "(\D+)", $r);
         // int
         $r = str_replace("@", "(\d+)", $r);
+
         return "/^". $r . "$/";
     }
 
-    public function dispatch(string $ur)
+    public function dispatch(string $ur): void
     {
         foreach($this->middleware_map as $middleware)
         {
@@ -40,8 +43,10 @@ class URouter
         }
     }
 
-    public function middleware(mixed $callback): void
+    public function middleware(mixed $callback): URouter
     {
         array_push($this->middleware_map, $callback);
+
+        return $this;
     }
 }
