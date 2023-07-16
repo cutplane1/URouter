@@ -4,12 +4,12 @@ namespace Cutplane1;
 
 class URouter
 {
-    public array $map;
+    public array $route_map, $middleware_map;
 
-    public function add(string $pattern, mixed $callback): void
+    public function route(string $pattern, mixed $callback): void
     {
         $pattern = $this->r2regex($pattern);
-        $this->map[$pattern] = ["pattern" => $pattern, "callback" => $callback];
+        $this->route_map[$pattern] = ["pattern" => $pattern, "callback" => $callback];
     }
 
     public function r2regex(string $r): string
@@ -22,7 +22,12 @@ class URouter
 
     public function dispatch(string $ur)
     {
-        foreach ($this->map as $pattern)
+        foreach($this->middleware_map as $middleware)
+        {
+            echo $middleware;
+        }
+
+        foreach($this->route_map as $pattern)
         {
             if (preg_match($pattern["pattern"], $ur, $outr))
             {
@@ -31,14 +36,9 @@ class URouter
             }
         }
     }
+
+    public function middleware(mixed $callback): void
+    {
+        array_push($this->middleware_map, $callback);
+    }
 }
-
-/* EXAMPLE:
-$r = new URouter();
-
-$r->add("/users/#/#", function($some_argument, $some_argument2) {
-    var_dump($some_argument, $some_argument2);
-});
-
-$r->dispatch($_SERVER["REQUEST_URI"]);
-*/
