@@ -1,6 +1,6 @@
 <?php
 
-namespace Cutplane;
+namespace Cutplane1;
 
 class URouter
 {
