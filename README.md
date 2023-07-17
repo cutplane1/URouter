@@ -5,7 +5,7 @@
 
 require "vendor/autoload.php";
 
-$router = new Cutplane1\URouter();
+$router = new Cutplane\URouter();
 
 $router->middleware(function() {
     header('Content-Type: application/json; charset=utf-8');
