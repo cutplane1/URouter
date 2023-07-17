@@ -19,7 +19,7 @@ class URouter
     {
         $r = str_replace("/", "\/", $r);
         // not int
-        $r = str_replace("#", "(\D+)", $r);
+        $r = str_replace("#", "(\w+)", $r);
         // int
         $r = str_replace("@", "(\d+)", $r);
 
