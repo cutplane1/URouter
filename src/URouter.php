@@ -4,18 +4,18 @@ namespace Cutplane1;
 
 class URouter
 {
-    public array $route_map;
-    public array $middleware_map = [];
+    public array $routes = [];
+    public array $middlewares = [];
 
-    public function route(string $pattern, mixed $callback): URouter
+    public function route(string $rule, mixed $callback): URouter
     {
-        $pattern = $this->r2regex($pattern);
-        $this->route_map[$pattern] = ["pattern" => $pattern, "callback" => $callback];
+        $pattern = $this->rule2regex($rule);
+        array_push($this->routes, ["pattern" => $pattern, "callback" => $callback, "rule" => $rule]);
 
         return $this;
     }
 
-    public function r2regex(string $r): string
+    public function rule2regex(string $r): string
     {
         $r = str_replace("/", "\/", $r);
         // not int
@@ -26,26 +26,26 @@ class URouter
         return "/^". $r . "$/";
     }
 
-    public function dispatch(string $ur): void
+    public function dispatch(string $r): void
     {
-        foreach($this->middleware_map as $middleware)
+        foreach($this->middlewares as $middleware)
         {
             call_user_func($middleware);
         }
 
-        foreach($this->route_map as $pattern)
+        foreach($this->routes as $pattern)
         {
-            if (preg_match($pattern["pattern"], $ur, $outr))
+            if (preg_match($pattern["pattern"], $r, $out))
             {
-                array_shift($outr);
-                call_user_func_array($pattern["callback"], $outr);
+                array_shift($out);
+                call_user_func_array($pattern["callback"], $out);
             }
         }
     }
 
     public function middleware(mixed $callback): URouter
     {
-        array_push($this->middleware_map, $callback);
+        array_push($this->middlewares, $callback);
 
         return $this;
     }
