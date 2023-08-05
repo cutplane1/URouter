@@ -9,10 +9,10 @@ class URouter
     public array $routes = [];
     public array $middlewares = [];
 
-    public function route(string $rule, mixed $callback, mixed $middleware): URouter
+    public function route(string $rule, mixed $callback, mixed $middleware = null): URouter
     {
         $pattern = $this->rule2regex($rule);
-        array_push($this->routes, ["pattern" => $pattern, "callback" => $callback, "rule" => $rule]);
+        array_push($this->routes, ["pattern" => $pattern, "callback" => $callback, "rule" => $rule, "middleware" => $middleware]);
 
         return $this;
     }
@@ -30,19 +30,22 @@ class URouter
 
     public function dispatch(string $r = null): void
     {
-        if(!$r) {$r = $this->default_req_uri;}
+        if (!$r) {$r = $this->default_req_uri;}
         foreach($this->middlewares as $middleware)
         {
             call_user_func($middleware);
         }
 
-        foreach($this->routes as $pattern)
+        foreach($this->routes as $route)
         {
-            if (preg_match($pattern["pattern"], $r, $out))
+            if (preg_match($route["pattern"], $r, $out))
             {
                 array_shift($out);
-                
-                call_user_func_array($pattern["callback"], $out);
+                if ($route["middleware"])
+                {
+                    call_user_func($route["middleware"]);
+                }
+                call_user_func_array($route["callback"], $out);
             }
         }
     }
