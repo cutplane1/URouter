@@ -4,7 +4,11 @@ namespace Cutplane1;
 
 class URouter
 {
-    public string $default_req_uri;
+    public $error_callback;
+
+    public string $default_req_uri = "/";
+
+    public bool $is_found = false;
 
     public array $routes = [];
 
@@ -32,19 +36,22 @@ class URouter
         if (!$uri) {
             $uri = $this->default_req_uri;
         }
-        foreach ($this->middlewares as $middleware) {
-            call_user_func($middleware);
-        }
 
         foreach ($this->routes as $route) {
             if (preg_match($route['pattern'], $uri, $out)) {
+                foreach ($this->middlewares as $middleware) {
+                    call_user_func($middleware);
+                }
                 array_shift($out);
                 if ($route['middleware']) {
                     call_user_func($route['middleware']);
                 }
                 call_user_func_array($route['callback'], $out);
+                $this->is_found = true;
             }
         }
+
+        if (!$this->is_found) {$this->not_found();}
     }
 
     public function middleware(callable $callback): URouter
@@ -71,5 +78,20 @@ class URouter
         }
 
         return $this;
+    }
+
+    public function not_found()
+    {
+        if ($this->error_callback) {
+            call_user_func($this->error_callback);
+        } else {
+            http_response_code(404);
+            echo "404";
+        }
+    }
+
+    public function handle_error(callable $callback)
+    {
+        $this->error_callback = $callback;
     }
 }
