@@ -21,10 +21,8 @@ class URouter
     public function rule2regex(string $rule): string
     {
         $rule = str_replace('/', "\/", $rule);
-        // not int
-        $rule = str_replace('#', "(\w+)", $rule);
-        // int
-        $rule = str_replace('@', "(\d+)", $rule);
+        $rule = str_replace(["<any>", "<str>", "<string>"], "(\w+)", $rule);
+        $rule = str_replace(["<int>", "<integer>", "<@>"], "(\d+)", $rule);
 
         return '/^'.$rule.'$/';
     }
