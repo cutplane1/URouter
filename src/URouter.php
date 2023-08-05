@@ -63,7 +63,7 @@ class URouter
         }
     }
 
-    public function group(array $routes, callable $middleware = null) // : URouter
+    public function group(array $routes, callable $middleware = null): URouter
     {
         foreach ($routes as $rule => $callback) {
             $pattern = $this->rule2regex($rule);
