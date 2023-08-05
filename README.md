@@ -5,7 +5,7 @@
 
 require "vendor/autoload.php";
 
-$router = new UPack\URouter();
+$router = new Cutplane1\URouter();
 
 $router->middleware(function() {
     header('Content-Type: application/json; charset=utf-8');
@@ -15,9 +15,9 @@ $router->route("/", function() {
     echo json_encode(["hello" => "world"]);
 });
 
-$router->route("/#", function($id) {
+$router->route("/<int>", function($id) {
     echo json_encode(["id" => $id]);
 });
 
-$router->dispatch($_SERVER["REQUEST_URI"]);
+$router->dispatch();
 ```
