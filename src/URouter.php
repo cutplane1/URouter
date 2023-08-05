@@ -9,7 +9,7 @@ class URouter
     public array $routes = [];
     public array $middlewares = [];
 
-    public function route(string $rule, mixed $callback, mixed $middleware = null): URouter
+    public function route(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $pattern = $this->rule2regex($rule);
         array_push($this->routes, ["pattern" => $pattern, "callback" => $callback, "rule" => $rule, "middleware" => $middleware]);
@@ -17,20 +17,20 @@ class URouter
         return $this;
     }
 
-    public function rule2regex(string $r): string
+    public function rule2regex(string $rule): string
     {
-        $r = str_replace("/", "\/", $r);
+        $rule = str_replace("/", "\/", $rule);
         // not int
-        $r = str_replace("#", "(\w+)", $r);
+        $rule = str_replace("#", "(\w+)", $rule);
         // int
-        $r = str_replace("@", "(\d+)", $r);
+        $rule = str_replace("@", "(\d+)", $rule);
 
-        return "/^". $r . "$/";
+        return "/^". $rule . "$/";
     }
 
-    public function dispatch(string $r = null): void
+    public function dispatch(string $uri = null): void
     {
-        if (!$r) {$r = $this->default_req_uri;}
+        if (!$uri) {$uri = $this->default_req_uri;}
         foreach($this->middlewares as $middleware)
         {
             call_user_func($middleware);
@@ -38,7 +38,7 @@ class URouter
 
         foreach($this->routes as $route)
         {
-            if (preg_match($route["pattern"], $r, $out))
+            if (preg_match($route["pattern"], $uri, $out))
             {
                 array_shift($out);
                 if ($route["middleware"])
@@ -50,7 +50,7 @@ class URouter
         }
     }
 
-    public function middleware(mixed $callback): URouter
+    public function middleware(callable $callback): URouter
     {
         array_push($this->middlewares, $callback);
 
