@@ -14,10 +14,17 @@ class URouter
 
     public array $middlewares = [];
 
-    public function route(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function get(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "GET");}
+    public function post(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "POST");}
+    public function put(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "PUT");}
+    public function patch(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "PATCH");}
+    public function delete(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "DELETE");}
+    public function options(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "OPTIONS");}
+    
+    public function route(string $rule, callable $callback, mixed $middleware = null, string $verb = "GET"): URouter
     {
         $pattern = $this->rule2regex($rule);
-        array_push($this->routes, ['pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware]);
+        array_push($this->routes, ['pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware, 'verb' => $verb]);
 
         return $this;
     }
@@ -38,7 +45,7 @@ class URouter
         }
 
         foreach ($this->routes as $route) {
-            if (preg_match($route['pattern'], $uri, $out)) {
+            if (preg_match($route['pattern'], $uri, $out) and $route['verb'] === $_SERVER['REQUEST_METHOD']) {
                 foreach ($this->middlewares as $middleware) {
                     call_user_func($middleware);
                 }
@@ -51,7 +58,7 @@ class URouter
             }
         }
 
-        if (!$this->is_found) {$this->not_found();}
+        if (!$this->is_found) {$this->handle_error();}
     }
 
     public function middleware(callable $callback): URouter
@@ -64,6 +71,7 @@ class URouter
     public function __construct()
     {
         if ('cli' === php_sapi_name()) {
+            $_SERVER['REQUEST_METHOD'] = "GET";
             $this->default_req_uri = '/';
         } else {
             $this->default_req_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -80,7 +88,7 @@ class URouter
         return $this;
     }
 
-    public function not_found()
+    public function handle_error()
     {
         if ($this->error_callback) {
             call_user_func($this->error_callback);
@@ -90,7 +98,7 @@ class URouter
         }
     }
 
-    public function handle_error(callable $callback)
+    public function not_found(callable $callback)
     {
         $this->error_callback = $callback;
     }
