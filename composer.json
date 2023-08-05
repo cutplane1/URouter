@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "UPack\\": "src/"
+            "cutplane1\\": "src/"
         }
     },
     "authors": [
