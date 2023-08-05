@@ -68,4 +68,22 @@ class URouter
         }
         
     }
+
+    public function group(array $routes, callable $middleware = null) //: URouter
+    {
+        foreach ($routes as $rule => $callback) {
+            $pattern = $this->rule2regex($rule);
+            array_push($this->routes, ["pattern" => $pattern, "callback" => $callback, "rule" => $rule, "middleware" => $middleware]);
+        }
+        // foreach($routes as $route)
+        // {
+            // echo ($route);
+            // $pattern = $this->rule2regex($route[0]);
+            // array_push($this->routes, ["pattern" => $pattern, "callback" => $route[1], "rule" => $route[0], "middleware" => $middleware]);
+        // }
+        // $pattern = $this->rule2regex($rule);
+        // array_push($this->routes, ["pattern" => $pattern, "callback" => $callback, "rule" => $rule, "middleware" => $middleware]);
+
+        return $this;
+    }
 }
