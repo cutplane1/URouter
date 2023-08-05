@@ -45,28 +45,46 @@ class URouter
     /**
      * GET HTTP Verb.
      */
-    public function get(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "GET");}
+    public function get(string $rule, callable $callback, mixed $middleware = null)
+    {
+        $this->route($rule, $callback, $middleware, "GET");
+    }
     /**
      * POST HTTP Verb.
      */
-    public function post(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "POST");}
+    public function post(string $rule, callable $callback, mixed $middleware = null)
+    {
+        $this->route($rule, $callback, $middleware, "POST");
+    }
     /**
      * PUT HTTP Verb.
      */
-    public function put(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "PUT");}
+    public function put(string $rule, callable $callback, mixed $middleware = null)
+    {
+        $this->route($rule, $callback, $middleware, "PUT");
+    }
     /**
      * PATCH HTTP Verb.
      */
-    public function patch(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "PATCH");}
+    public function patch(string $rule, callable $callback, mixed $middleware = null)
+    {
+        $this->route($rule, $callback, $middleware, "PATCH");
+    }
     /**
      * DELETE HTTP Verb.
      */
-    public function delete(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "DELETE");}
+    public function delete(string $rule, callable $callback, mixed $middleware = null)
+    {
+        $this->route($rule, $callback, $middleware, "DELETE");
+    }
     /**
      * OPTIONS HTTP Verb.
      */
-    public function options(string $rule, callable $callback, mixed $middleware = null) {$this->route($rule, $callback, $middleware, "OPTIONS");}
-    
+    public function options(string $rule, callable $callback, mixed $middleware = null)
+    {
+        $this->route($rule, $callback, $middleware, "OPTIONS");
+    }
+
     /**
      * Adds route to array.
      */
@@ -156,6 +174,8 @@ class URouter
             }
         }
 
-        if (!$this->is_found) {$this->handle_error();}
+        if (!$this->is_found) {
+            $this->handle_error();
+        }
     }
 }
