@@ -42,6 +42,11 @@ class URouter
         }
     }
 
+    public function any(string $rule, callable $callback, mixed $middleware = null)
+    {
+        $this->route($rule, $callback, $middleware, "ANY");
+    }
+
     /**
      * GET HTTP Verb.
      */
@@ -88,7 +93,7 @@ class URouter
     /**
      * Adds route to array.
      */
-    public function route(string $rule, callable $callback, mixed $middleware = null, string $verb = "GET"): URouter
+    public function route(string $rule, callable $callback, mixed $middleware = null, string $verb): URouter
     {
         $pattern = $this->rule2regex($rule);
         array_push($this->routes, ['pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware, 'verb' => $verb]);
@@ -161,7 +166,8 @@ class URouter
         }
 
         foreach ($this->routes as $route) {
-            if (preg_match($route['pattern'], $uri, $out) and $route['verb'] === $_SERVER['REQUEST_METHOD']) {
+            $match = preg_match($route['pattern'], $uri, $out);
+            if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
                 foreach ($this->middlewares as $middleware) {
                     call_user_func($middleware);
                 }
