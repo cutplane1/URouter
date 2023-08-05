@@ -1,16 +1,16 @@
 {
-    "name": "cutplane1/u-router",
+    "name": "cutplane1/n-router",
     "description": "Unfinished router.",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Cutplane1\\": "src/"
+            "UPack\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "cutplane1"
+            "name": "upack"
         }
     ],
     "minimum-stability": "stable",
