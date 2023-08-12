@@ -151,9 +151,11 @@ class URouter
     /**
      * Sets error callback.
      */
-    public function not_found(callable $callback)
+    public function not_found(callable $callback): URouter
     {
         $this->error_callback = $callback;
+
+        return $this;
     }
 
     /**
