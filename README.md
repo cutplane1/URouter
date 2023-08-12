@@ -1,5 +1,5 @@
 # u-router
-
+## Works with older php versions (>=5.3).
 ```php
 <?php
 
