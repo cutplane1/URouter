@@ -15,22 +15,22 @@ class URouter
     /**
      * Request URI.
      */
-    public string $default_req_uri;
+    public $default_req_uri;
 
     /**
      * Invokes a callback.
      */
-    public bool $is_found = false;
+    public $is_found = false;
 
     /**
      * Array of routes.
      */
-    public array $routes = [];
+    public $routes = array();
 
     /**
      * Array of middlewares.
      */
-    public array $middlewares = [];
+    public $middlewares = array();
 
     public function __construct()
     {
@@ -42,7 +42,7 @@ class URouter
         }
     }
 
-    public function any(string $rule, callable $callback, mixed $middleware = null)
+    public function any($rule, $callback, $middleware = null)
     {
         $this->route($rule, $callback, $middleware, "ANY");
     }
@@ -50,42 +50,42 @@ class URouter
     /**
      * GET HTTP Verb.
      */
-    public function get(string $rule, callable $callback, mixed $middleware = null)
+    public function get($rule, $callback, $middleware = null)
     {
         $this->route($rule, $callback, $middleware, "GET");
     }
     /**
      * POST HTTP Verb.
      */
-    public function post(string $rule, callable $callback, mixed $middleware = null)
+    public function post($rule, $callback, $middleware = null)
     {
         $this->route($rule, $callback, $middleware, "POST");
     }
     /**
      * PUT HTTP Verb.
      */
-    public function put(string $rule, callable $callback, mixed $middleware = null)
+    public function put($rule, $callback, $middleware = null)
     {
         $this->route($rule, $callback, $middleware, "PUT");
     }
     /**
      * PATCH HTTP Verb.
      */
-    public function patch(string $rule, callable $callback, mixed $middleware = null)
+    public function patch($rule, $callback, $middleware = null)
     {
         $this->route($rule, $callback, $middleware, "PATCH");
     }
     /**
      * DELETE HTTP Verb.
      */
-    public function delete(string $rule, callable $callback, mixed $middleware = null)
+    public function delete($rule, $callback, $middleware = null)
     {
         $this->route($rule, $callback, $middleware, "DELETE");
     }
     /**
      * OPTIONS HTTP Verb.
      */
-    public function options(string $rule, callable $callback, mixed $middleware = null)
+    public function options($rule, $callback, $middleware = null)
     {
         $this->route($rule, $callback, $middleware, "OPTIONS");
     }
@@ -93,21 +93,21 @@ class URouter
     /**
      * Adds route to array.
      */
-    public function route(string $rule, callable $callback, mixed $middleware = null, string $verb): URouter
+    public function route($rule, $callback, $middleware = null, $verb)
     {
         $pattern = $this->rule2regex($rule);
-        array_push($this->routes, ['pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware, 'verb' => $verb]);
+        array_push($this->routes, array('pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware, 'verb' => $verb));
 
         return $this;
     }
     /**
      * Adds a route group to an array.
      */
-    public function group(array $routes, callable $middleware = null): URouter
+    public function group($routes, $middleware = null)
     {
         foreach ($routes as $rule => $callback) {
             $pattern = $this->rule2regex($rule);
-            array_push($this->routes, ['pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware]);
+            array_push($this->routes, array('pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware));
         }
 
         return $this;
@@ -116,11 +116,11 @@ class URouter
     /**
      * Turns an easy-to-read rule into a regular expression.
      */
-    public function rule2regex(string $rule): string
+    public function rule2regex($rule)
     {
         $rule = str_replace('/', "\/", $rule);
-        $rule = str_replace(["<any>", "<str>", "<string>", "<#>"], "(\w+)", $rule);
-        $rule = str_replace(["<int>", "<integer>", "<@>"], "(\d+)", $rule);
+        $rule = str_replace(array("<any>", "<str>", "<string>", "<#>"), "(\w+)", $rule);
+        $rule = str_replace(array("<int>", "<integer>", "<@>"), "(\d+)", $rule);
 
         return '/^'.$rule.'$/';
     }
@@ -128,7 +128,7 @@ class URouter
     /**
      * Adds middleware to array.
      */
-    public function middleware(callable $callback): URouter
+    public function middleware($callback)
     {
         array_push($this->middlewares, $callback);
 
@@ -151,7 +151,7 @@ class URouter
     /**
      * Sets error callback.
      */
-    public function not_found(callable $callback)
+    public function not_found($callback)
     {
         $this->error_callback = $callback;
     }
@@ -159,7 +159,7 @@ class URouter
     /**
      * Executes a callback when a route is found.
      */
-    public function dispatch(string $uri = null): void
+    public function dispatch($uri = null)
     {
         if (!$uri) {
             $uri = $this->default_req_uri;
