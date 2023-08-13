@@ -32,6 +32,8 @@ class URouter
      */
     public array $middlewares = [];
 
+    public $context;
+
     public function __construct()
     {
         if ('cli' === php_sapi_name()) {
@@ -40,6 +42,8 @@ class URouter
         } else {
             $this->default_req_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         }
+
+        $this->context = new Context();
     }
 
     public function any(string $rule, callable $callback, mixed $middleware = null)
@@ -169,21 +173,29 @@ class URouter
 
         foreach ($this->routes as $route) {
             $match = preg_match($route['pattern'], $uri, $out);
-            if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
-                foreach ($this->middlewares as $middleware) {
-                    call_user_func($middleware);
-                }
-                array_shift($out);
-                if ($route['middleware']) {
-                    call_user_func($route['middleware']);
-                }
-                call_user_func_array($route['callback'], $out);
-                $this->is_found = true;
-            }
+            array_shift($out);
+            var_dump($out);
+            // if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
+            //     foreach ($this->middlewares as $middleware) {
+            //         call_user_func($middleware);
+            //     }
+
+            //     // new Context() > setout
+            //     if ($route['middleware']) {
+            //         call_user_func($route['middleware']);
+            //     }
+            //     call_user_func($route['callback'], $out);
+            //     $this->is_found = true;
+            // }
         }
 
-        if (!$this->is_found) {
-            $this->handle_error();
-        }
+        // if (!$this->is_found) {
+        //     $this->handle_error();
+        // }
     }
+}
+
+class Context
+{
+
 }
