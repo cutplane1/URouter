@@ -1,4 +1,4 @@
-# u-router
+# u-router (1.2.2)
 ## Works with older php versions (>=5.3).
 ```php
 <?php
