@@ -42,7 +42,7 @@ class URouter
         }
     }
 
-    public function any(string $rule, callable $callback, mixed $middleware = null)
+    public function any(string $rule, callable $callback, mixed $middleware = null): void
     {
         $this->route($rule, $callback, $middleware, "ANY");
     }
@@ -50,42 +50,42 @@ class URouter
     /**
      * GET HTTP Verb.
      */
-    public function get(string $rule, callable $callback, mixed $middleware = null)
+    public function get(string $rule, callable $callback, mixed $middleware = null): void
     {
         $this->route($rule, $callback, $middleware, "GET");
     }
     /**
      * POST HTTP Verb.
      */
-    public function post(string $rule, callable $callback, mixed $middleware = null)
+    public function post(string $rule, callable $callback, mixed $middleware = null): void
     {
         $this->route($rule, $callback, $middleware, "POST");
     }
     /**
      * PUT HTTP Verb.
      */
-    public function put(string $rule, callable $callback, mixed $middleware = null)
+    public function put(string $rule, callable $callback, mixed $middleware = null): void
     {
         $this->route($rule, $callback, $middleware, "PUT");
     }
     /**
      * PATCH HTTP Verb.
      */
-    public function patch(string $rule, callable $callback, mixed $middleware = null)
+    public function patch(string $rule, callable $callback, mixed $middleware = null): void
     {
         $this->route($rule, $callback, $middleware, "PATCH");
     }
     /**
      * DELETE HTTP Verb.
      */
-    public function delete(string $rule, callable $callback, mixed $middleware = null)
+    public function delete(string $rule, callable $callback, mixed $middleware = null): void
     {
         $this->route($rule, $callback, $middleware, "DELETE");
     }
     /**
      * OPTIONS HTTP Verb.
      */
-    public function options(string $rule, callable $callback, mixed $middleware = null)
+    public function options(string $rule, callable $callback, mixed $middleware = null): void
     {
         $this->route($rule, $callback, $middleware, "OPTIONS");
     }
@@ -138,7 +138,7 @@ class URouter
     /**
      * Executes callback on error.
      */
-    public function handle_error()
+    public function handle_error(): mixed
     {
         if ($this->error_callback) {
             call_user_func($this->error_callback);
@@ -184,6 +184,24 @@ class URouter
 
         if (!$this->is_found) {
             $this->handle_error();
+        }
+    }
+
+    /**
+     * Returns true if route is found.
+     */
+    public function test(string $uri): bool
+    {
+        foreach ($this->routes as $route) {
+            $match = preg_match($route['pattern'], $uri, $out);
+            if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
+                $this->is_found = true;
+                return true;
+            }
+        }
+
+        if (!$this->is_found) {
+            return false;
         }
     }
 }
