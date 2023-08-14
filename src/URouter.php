@@ -32,7 +32,7 @@ class URouter
      */
     public array $middlewares = [];
 
-    public $context;
+    public Context $context;
 
     public function __construct()
     {
