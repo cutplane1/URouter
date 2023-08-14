@@ -42,52 +42,66 @@ class URouter
         }
     }
 
-    public function any(string $rule, callable $callback, mixed $middleware = null): void
+    public function any(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $this->route($rule, $callback, $middleware, "ANY");
+
+        return $this;
     }
 
     /**
      * GET HTTP Verb.
      */
-    public function get(string $rule, callable $callback, mixed $middleware = null): void
+    public function get(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $this->route($rule, $callback, $middleware, "GET");
+
+        return $this;
     }
     /**
      * POST HTTP Verb.
      */
-    public function post(string $rule, callable $callback, mixed $middleware = null): void
+    public function post(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $this->route($rule, $callback, $middleware, "POST");
+
+        return $this;
     }
     /**
      * PUT HTTP Verb.
      */
-    public function put(string $rule, callable $callback, mixed $middleware = null): void
+    public function put(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $this->route($rule, $callback, $middleware, "PUT");
+
+        return $this;
     }
     /**
      * PATCH HTTP Verb.
      */
-    public function patch(string $rule, callable $callback, mixed $middleware = null): void
+    public function patch(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $this->route($rule, $callback, $middleware, "PATCH");
+
+        return $this;
     }
     /**
      * DELETE HTTP Verb.
      */
-    public function delete(string $rule, callable $callback, mixed $middleware = null): void
+    public function delete(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $this->route($rule, $callback, $middleware, "DELETE");
+
+        return $this;
     }
     /**
      * OPTIONS HTTP Verb.
      */
-    public function options(string $rule, callable $callback, mixed $middleware = null): void
+    public function options(string $rule, callable $callback, mixed $middleware = null): URouter
     {
         $this->route($rule, $callback, $middleware, "OPTIONS");
+
+        return $this;
     }
 
     /**
