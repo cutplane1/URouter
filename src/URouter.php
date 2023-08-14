@@ -174,28 +174,38 @@ class URouter
         foreach ($this->routes as $route) {
             $match = preg_match($route['pattern'], $uri, $out);
             array_shift($out);
-            var_dump($out);
-            // if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
-            //     foreach ($this->middlewares as $middleware) {
-            //         call_user_func($middleware);
-            //     }
+            $this->context->args = $out;
+            if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
+                foreach ($this->middlewares as $middleware) {
+                    call_user_func($middleware);
+                }
 
-            //     // new Context() > setout
-            //     if ($route['middleware']) {
-            //         call_user_func($route['middleware']);
-            //     }
-            //     call_user_func($route['callback'], $out);
-            //     $this->is_found = true;
-            // }
+                // new Context() > setout
+                if ($route['middleware']) {
+                    call_user_func($route['middleware']);
+                }
+                call_user_func($route['callback'], $this->context);
+                $this->is_found = true;
+            }
         }
 
-        // if (!$this->is_found) {
-        //     $this->handle_error();
-        // }
+        if (!$this->is_found) {
+            $this->handle_error();
+        }
+    }
+
+    public function add($name, $obj)
+    {
+        $this->context->$name = $obj;
     }
 }
 
 class Context
 {
+    public array $args;
 
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }
