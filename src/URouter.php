@@ -42,7 +42,7 @@ class URouter
         }
     }
 
-    public function any(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function any(string $rule, callable $callback, mixed $middleware = null): self
     {
         $this->route($rule, $callback, $middleware, "ANY");
 
@@ -52,7 +52,7 @@ class URouter
     /**
      * GET HTTP Verb.
      */
-    public function get(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function get(string $rule, callable $callback, mixed $middleware = null): self
     {
         $this->route($rule, $callback, $middleware, "GET");
 
@@ -61,7 +61,7 @@ class URouter
     /**
      * POST HTTP Verb.
      */
-    public function post(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function post(string $rule, callable $callback, mixed $middleware = null): self
     {
         $this->route($rule, $callback, $middleware, "POST");
 
@@ -70,7 +70,7 @@ class URouter
     /**
      * PUT HTTP Verb.
      */
-    public function put(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function put(string $rule, callable $callback, mixed $middleware = null): self
     {
         $this->route($rule, $callback, $middleware, "PUT");
 
@@ -79,7 +79,7 @@ class URouter
     /**
      * PATCH HTTP Verb.
      */
-    public function patch(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function patch(string $rule, callable $callback, mixed $middleware = null): self
     {
         $this->route($rule, $callback, $middleware, "PATCH");
 
@@ -88,7 +88,7 @@ class URouter
     /**
      * DELETE HTTP Verb.
      */
-    public function delete(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function delete(string $rule, callable $callback, mixed $middleware = null): self
     {
         $this->route($rule, $callback, $middleware, "DELETE");
 
@@ -97,7 +97,7 @@ class URouter
     /**
      * OPTIONS HTTP Verb.
      */
-    public function options(string $rule, callable $callback, mixed $middleware = null): URouter
+    public function options(string $rule, callable $callback, mixed $middleware = null): self
     {
         $this->route($rule, $callback, $middleware, "OPTIONS");
 
@@ -107,7 +107,7 @@ class URouter
     /**
      * Adds route to array.
      */
-    public function route(string $rule, callable $callback, mixed $middleware = null, string $verb): URouter
+    public function route(string $rule, callable $callback, mixed $middleware = null, string $verb): self
     {
         $pattern = $this->rule2regex($rule);
         array_push($this->routes, ['pattern' => $pattern, 'callback' => $callback, 'rule' => $rule, 'middleware' => $middleware, 'verb' => $verb]);
@@ -117,7 +117,7 @@ class URouter
     /**
      * Adds a route group to an array.
      */
-    public function group(array $routes, callable $middleware = null): URouter
+    public function group(array $routes, callable $middleware = null): self
     {
         foreach ($routes as $rule => $callback) {
             $pattern = $this->rule2regex($rule);
@@ -142,7 +142,7 @@ class URouter
     /**
      * Adds middleware to array.
      */
-    public function middleware(callable $callback): URouter
+    public function middleware(callable $callback): self
     {
         array_push($this->middlewares, $callback);
 
@@ -152,7 +152,7 @@ class URouter
     /**
      * Executes callback on error.
      */
-    public function handle_error(): mixed
+    public function handle_error()
     {
         if ($this->error_callback) {
             call_user_func($this->error_callback);
@@ -165,7 +165,7 @@ class URouter
     /**
      * Sets error callback.
      */
-    public function not_found(callable $callback): URouter
+    public function not_found(callable $callback): self
     {
         $this->error_callback = $callback;
 
