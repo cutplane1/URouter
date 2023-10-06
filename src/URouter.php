@@ -35,7 +35,7 @@ class URouter
     public function __construct()
     {
         if ('cli' === php_sapi_name()) {
-            $_SERVER['REQUEST_METHOD'] = "GET";
+            // $_SERVER['REQUEST_METHOD'] = "GET";
             $this->default_req_uri = '/';
         } else {
             $this->default_req_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -132,11 +132,11 @@ class URouter
      */
     public function rule2regex(string $rule): string
     {
-        $rule = str_replace('/', "\/", $rule);
+        // $rule = str_replace('/', "\/", $rule);
         $rule = str_replace(["<any>", "<str>", "<string>", "<#>"], "(\w+)", $rule);
         $rule = str_replace(["<int>", "<integer>", "<@>"], "(\d+)", $rule);
 
-        return '/^'.$rule.'$/';
+        return '@^'.$rule.'$@';
     }
 
     /**
@@ -152,7 +152,7 @@ class URouter
     /**
      * Executes callback on error.
      */
-    public function handle_error()
+    public function handle_error()//: mixed
     {
         if ($this->error_callback) {
             call_user_func($this->error_callback);
@@ -175,15 +175,25 @@ class URouter
     /**
      * Executes a callback when a route is found.
      */
-    public function dispatch(string $uri = null): void
+    public function dispatch(string $uri = null, string $method = null): void
     {
         if (!$uri) {
             $uri = $this->default_req_uri;
         }
 
+        if (!$method) {
+            if ('cli' === php_sapi_name()) {
+                $method = "GET";
+            } else {
+                $method = $_SERVER['REQUEST_METHOD'];
+            }
+            
+            
+        }
+
         foreach ($this->routes as $route) {
             $match = preg_match($route['pattern'], $uri, $out);
-            if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
+            if ($match and $route['verb'] === $method or $match and $route['verb'] === "ANY") {
                 foreach ($this->middlewares as $middleware) {
                     call_user_func($middleware);
                 }
@@ -204,18 +214,20 @@ class URouter
     /**
      * Returns true if route is found.
      */
-    public function test(string $uri): bool
+    public function test(string $uri, string $method = "GET"): bool
     {
         foreach ($this->routes as $route) {
             $match = preg_match($route['pattern'], $uri, $out);
-            if ($match and $route['verb'] === $_SERVER['REQUEST_METHOD'] or $match and $route['verb'] === "ANY") {
-                $this->is_found = true;
+            if ($match and $route['verb'] === $method or $match and $route['verb'] === "ANY") {
                 return true;
             }
         }
-
-        if (!$this->is_found) {
-            return false;
-        }
+        return false;
     }
+
+    // combined regex test
+    // function print_routes()
+    // {
+    //     var_dump($this->routes);
+    // }
 }
