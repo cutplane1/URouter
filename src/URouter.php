@@ -175,7 +175,7 @@ class URouter
     /**
      * Executes a callback when a route is found.
      */
-    public function dispatch(string $uri = null, string $method = null): void
+    public function dispatch(string $uri = null, string $method = null): mixed
     {
         if (!$uri) {
             $uri = $this->default_req_uri;
@@ -193,21 +193,27 @@ class URouter
 
         foreach ($this->routes as $route) {
             $match = preg_match($route['pattern'], $uri, $out);
+            array_shift($out);
             if ($match and $route['verb'] === $method or $match and $route['verb'] === "ANY") {
-                foreach ($this->middlewares as $middleware) {
-                    call_user_func($middleware);
-                }
-                array_shift($out);
+                $this->call_middlewares();
+
                 if ($route['middleware']) {
                     call_user_func($route['middleware']);
                 }
-                call_user_func_array($route['callback'], $out);
+                return call_user_func_array($route['callback'], $out);
                 $this->is_found = true;
             }
         }
 
         if (!$this->is_found) {
             $this->handle_error();
+        }
+    }
+
+    public function call_middlewares()
+    {
+        foreach ($this->middlewares as $middleware) {
+            call_user_func($middleware);
         }
     }
 
@@ -224,10 +230,4 @@ class URouter
         }
         return false;
     }
-
-    // combined regex test
-    // function print_routes()
-    // {
-    //     var_dump($this->routes);
-    // }
 }
