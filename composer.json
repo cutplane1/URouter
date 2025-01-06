@@ -1,6 +1,6 @@
 {
     "name": "cutplane1/u-router",
-    "description": "Unfinished router.",
+    "description": "Finished router.",
     "type": "library",
     "license": "MIT",
     "autoload": {
